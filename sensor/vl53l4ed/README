@@ -1,0 +1,48 @@
+VL53L4ED
+########
+
+Origin:
+   ST Microelectronics
+   https://www.st.com/en/embedded-software/stsw-img044.html
+
+Status:
+   version 1.1.3
+
+Purpose:
+   ST Microelectronics official Ultra Lite Driver (ULD) API to use vl53l4ed sensor.
+
+Description:
+   This library written by STMicroelectronics is dedicated to vl53l4ed time of flight sensors.
+   Instead of providing a full description of the registers, ST decided to provide a C library to drive this sensor.
+
+   This library is called from the vl53l4ed driver and is kept transparent for users.
+   User is calling a standard Zephyr driver and then, the driver makes some calls to this library.
+
+   In order to fit with Zephyr rules and simplify version updates, we have done a minimum of modifications :
+      - split headers and source to inc/src
+      - keep only the API directory
+        (remove documentation and samples, see ST website for this)
+
+   In order to use this library, you have to :
+      * define CONFIG_HAS_STLIB and CONFIG_VL53L4ED
+      * include vl53l4ed_api.h (and vl53l4ed_calibration.h if calibration is needed)
+        in the driver; vl53l4ed_platform.h is provided by the driver directory
+
+Dependencies:
+   This package depends on Zephyr I2C implementation and is linked statically.
+   This library will be used by a standard Zephyr driver.
+
+URL:
+   https://www.st.com/en/embedded-software/stsw-img044.html
+
+commit:
+   version 1.1.3
+
+Maintained-by:
+   External
+
+License:
+   BSD-3-Clause
+
+License Link:
+   https://www.st.com/en/embedded-software/stsw-img044.html
