@@ -1,0 +1,55 @@
+VL53L7CH/VL53L8CH
+#################
+
+Origin:
+   ST Microelectronics
+   https://www.st.com/en/embedded-software/stsw-img043.html
+
+Status:
+   version 2.0.16
+
+Purpose:
+   ST Microelectronics official Ultra Lite Driver (ULD) API to use vl53l7ch and vl53l8ch sensors.
+
+Description:
+   This library written by STMicroelectronics is dedicated to vl53l7ch/vl53l8ch time of flight sensors.
+   Instead of providing a full description of the registers, ST decided to provide a C library to drive this sensor.
+
+   The vl53l7ch and vl53l8ch share the same generic VL53LMZ API, so this single
+   HAL serves both sensors (module type reported at runtime via
+   VL53LMZ_MODULE_TYPE_L7 / VL53LMZ_MODULE_TYPE_L8).
+
+   This library is called from the vl53lmz driver and is kept transparent for users.
+   User is calling a standard Zephyr driver and then, the driver makes some calls to this library.
+
+   In order to fit with Zephyr rules and simplify version updates, we have done a minimum of modifications :
+      - split headers and source to inc/src
+      - keep only the API directory
+        (remove documentation and samples, see ST website for this)
+      - drop the ST-provided platform stub; the Zephyr driver supplies its own
+
+   In order to use this library, you have to :
+      * define CONFIG_HAS_STLIB and CONFIG_VL53LMZ
+      * include vl53lmz_api.h (plus the vl53lmz_plugin_*.h headers for the
+        optional CNH / detection-thresholds / motion-indicator / xtalk
+        plugins) in the driver; vl53lmz_platform.h is provided by the driver
+        directory
+
+Dependencies:
+   This package depends on Zephyr I2C implementation and is linked statically.
+   This library will be used by a standard Zephyr driver.
+
+URL:
+   https://www.st.com/en/embedded-software/stsw-img043.html
+
+commit:
+   version 2.0.16
+
+Maintained-by:
+   External
+
+License:
+   BSD-3-Clause
+
+License Link:
+   https://www.st.com/en/embedded-software/stsw-img043.html
