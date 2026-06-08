@@ -1563,9 +1563,25 @@ uint8_t vl53lmz_send_output_config_and_start(
                 /* it is zone data (does not depend on NB_TARGET_PER_ZONE) */
                 bh_ptr->size = resolution;
             }
-            else if ((uint16_t)bh_ptr->idx < (uint16_t)(0x6C90))
+            else
             {
-                /* it is a per-target data block (depends on NB_TARGET_PER_ZONE) */
+                /*
+                 * Per-target data block: its element count scales with
+                 * resolution * NB_TARGET_PER_ZONE.
+                 *
+                 * FILICS FORK MODIFICATION: upstream gated this branch on
+                 * (idx < 0x6C90), which only matches the multi-target block map
+                 * (per-target blocks at 0x5890..0x6B90). With
+                 * NB_TARGET_PER_ZONE == 1 the per-target blocks live at
+                 * 0xDB84..0xE084, above that threshold, so the rescale was
+                 * skipped and their size stayed hardcoded at 64 (8x8 zones)
+                 * regardless of the configured resolution. That made
+                 * data_read_size resolution-independent and inflated the I2C
+                 * frame (e.g. 712 B instead of 232 B at 4x4). Treating every
+                 * non-zone data block as per-target rescales correctly for both
+                 * block maps; the multi-target case is unchanged because all of
+                 * its per-target blocks already fell below the old threshold.
+                 */
                 bh_ptr->size = (uint32_t)resolution
                             * (uint32_t)VL53LMZ_NB_TARGET_PER_ZONE;
             }
