@@ -498,6 +498,19 @@ VL53L4ED_Error VL53L4ED_GetResult(
 		&temp_16);
 	p_result->distance_mm = temp_16;
 
+	/*
+	 * raw_spads is read over I2C; a failed read (e.g. a sensor unplugged at
+	 * runtime) leaves it 0. Guard the per-SPAD divisions so a bad read yields a
+	 * zeroed result and the accumulated error status instead of trapping on a
+	 * division by zero.
+	 */
+	if (raw_spads == (uint16_t)0)
+	{
+		p_result->signal_per_spad_kcps = 0;
+		p_result->ambient_per_spad_kcps = 0;
+		return status;
+	}
+
 	p_result->signal_per_spad_kcps = p_result->signal_rate_kcps *256
 			/(uint32_t) raw_spads;
 	p_result->ambient_per_spad_kcps = p_result->ambient_rate_kcps *256
